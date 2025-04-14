@@ -24,14 +24,4 @@ public class ScheduleController {
     public List<Schedule> getSchedulesByDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return scheduleService.getSchedulesByDate(date);
     }
-
-    @PostMapping
-    public Schedule addSchedule(@RequestBody Schedule schedule) {
-        return scheduleService.addSchedule(schedule);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteSchedule(@PathVariable Long id) {
-        scheduleService.deleteSchedule(id);
-    }
 }
