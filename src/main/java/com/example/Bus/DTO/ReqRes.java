@@ -28,13 +28,12 @@ public class ReqRes {
     private List<Bus> buses;
     private List<Schedule> schedules;
     private List<Seat> seats;
-
-    public List<Passenger> getPassengers() {
+    public List<Passenger> getPassengerList() {
         return passengers;
     }
 
-    public void setPassengers(List<Passenger> passengers) {
-        this.passengers = passengers;
+    public void setPassengerList(List<Passenger> passenger) {
+        this.passengers = passenger;
     }
 
     public List<BookingHistory> getBookingHistory() {
@@ -163,9 +162,6 @@ public class ReqRes {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public void setPassengerList(List<Passenger> result) {
     }
 
     public void setPassenger(Passenger userResult) {

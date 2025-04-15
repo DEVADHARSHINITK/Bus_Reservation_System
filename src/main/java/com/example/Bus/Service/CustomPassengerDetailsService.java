@@ -5,7 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.example.Bus.Repository.PassengerRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CustomPassengerDetailsService implements UserDetailsService {
     @Autowired
     private PassengerRepository passengerRepository;

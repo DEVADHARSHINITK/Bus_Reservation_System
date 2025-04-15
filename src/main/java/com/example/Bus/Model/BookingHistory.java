@@ -12,7 +12,6 @@ public class BookingHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long passengerId;
     private String tripDetails;
     private LocalDateTime bookedAt;
