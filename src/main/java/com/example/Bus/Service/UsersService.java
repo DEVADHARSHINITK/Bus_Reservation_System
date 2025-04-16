@@ -1,21 +1,22 @@
 package com.example.Bus.Service;
 
-import com.example.Bus.Model.Passenger;
-import com.example.Bus.Repository.PassengerRepository;
+import com.example.Bus.DTO.UsersDTO;
+import com.example.Bus.Model.Users;
+import com.example.Bus.Repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.example.Bus.DTO.ReqRes;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PassengerService {
+public class UsersService {
 
     @Autowired
-    private PassengerRepository passengerRepository;
+    private UsersRepository userRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -23,27 +24,27 @@ public class PassengerService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ReqRes register(ReqRes registerRequest){
+    public UsersDTO register(UsersDTO registerRequest){
 
-        ReqRes reqResObj = new ReqRes();
+        UsersDTO reqResObj = new UsersDTO();
 
         try {
 
-            Passenger userObj = new Passenger();
+            Users userObj = new Users();
 
-            userObj.setName(registerRequest.getName());
+            userObj.setUsername(registerRequest.getUsername());
             userObj.setGender(registerRequest.getGender());
-            userObj.setPhone(registerRequest.getPhone());
+            userObj.setPhoneno(registerRequest.getPhoneno());
             userObj.setEmail(registerRequest.getEmail());
             userObj.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
             userObj.setRole(registerRequest.getRole());
 
-            Passenger userResult = passengerRepository.save(userObj);
+            Users userResult = userRepository.save(userObj);
 
             if (userResult.getId()>0) {
                 reqResObj.setMessage("Registered Successfully");
                 reqResObj.setStatusCode(200);
-                reqResObj.setPassenger((userResult));
+                reqResObj.setUser(userResult);
             }
 
         }catch (Exception e){
@@ -53,15 +54,15 @@ public class PassengerService {
         return reqResObj;
     }
 
-    public ReqRes login(ReqRes loginRequest){
+    public UsersDTO login(UsersDTO loginRequest){
 
-        ReqRes reqResObj = new ReqRes();
+        UsersDTO reqResObj = new UsersDTO();
 
         try {
             authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
-            var user = passengerRepository.findByEmail(loginRequest.getEmail()).orElseThrow();
+            var user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow();
             reqResObj.setMessage("Login Successful");
             reqResObj.setStatusCode(200);
             reqResObj.setRole(user.getRole());
@@ -72,15 +73,15 @@ public class PassengerService {
         return reqResObj;
     }
 
-    public ReqRes getAllPassengers() {
+    public UsersDTO getAllUsers() {
 
-        ReqRes reqResObj = new ReqRes();
+        UsersDTO reqResObj = new UsersDTO();
 
         try {
-            List<Passenger> result = passengerRepository.findAll();
+            List<Users> result = userRepository.findAll();
 
             if (!result.isEmpty()) {
-                reqResObj.setPassengerList(result);
+                reqResObj.setUsersList(result);
                 reqResObj.setMessage("Get all user success");
                 reqResObj.setStatusCode(200);
             } else {
@@ -96,12 +97,12 @@ public class PassengerService {
         }
     }
 
-    public ReqRes deletePassenger(Long passengerId) {
-        ReqRes reqRes = new ReqRes();
+    public UsersDTO deleteUser(Long userid) {
+        UsersDTO reqRes = new UsersDTO();
         try {
-            Optional<Passenger> userOptional = passengerRepository.findById(passengerId);
+            Optional<Users> userOptional = userRepository.findById(userid);
             if (userOptional.isPresent()) {
-                passengerRepository.deleteById(passengerId);
+                userRepository.deleteById(userid);
                 reqRes.setStatusCode(200);
                 reqRes.setMessage("User deleted successfully");
             } else {
@@ -116,4 +117,3 @@ public class PassengerService {
     }
 
 }
-

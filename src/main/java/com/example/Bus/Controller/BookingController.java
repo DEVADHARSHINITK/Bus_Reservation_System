@@ -1,35 +1,26 @@
 package com.example.Bus.Controller;
 
+import com.example.Bus.DTO.BookingDTO;
 import com.example.Bus.Model.Booking;
 import com.example.Bus.Service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-
 @RestController
-@RequestMapping("/api/bookings")
+@RequestMapping("/api/passenger/bookings")
+@CrossOrigin("*")
 public class BookingController {
-
     @Autowired
     private BookingService bookingService;
 
     @PostMapping
-    public Booking bookSeat(@RequestBody Booking booking) {
-        return bookingService.bookSeat(booking);
+    public Booking createBooking(@RequestBody BookingDTO bookingDTO) {
+        return bookingService.createBooking(bookingDTO);
     }
 
-    @GetMapping
-    public List<Booking> getAllBookings() {
-        return bookingService.getAllBookings();
-    }
-
-    @GetMapping("/passenger/{passengerId}")
-    public List<Booking> getBookingsByPassenger(@PathVariable Long passengerId) {
-        return bookingService.getBookingsByPassenger(passengerId);
-    }
-
-    @DeleteMapping("/{id}")
-    public void cancelBooking(@PathVariable Long id) {
-        bookingService.cancelBooking(id);
+    @GetMapping("/user/{userId}")
+    public List<Booking> getBookingsByUserId(@PathVariable Long userId) {
+        return bookingService.getBookingsByUserId(userId);
     }
 }
