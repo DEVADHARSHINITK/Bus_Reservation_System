@@ -7,8 +7,6 @@ const BookingHistoryPage = () => {
 
   const handleEmailSubmit = (e) => {
     e.preventDefault();
-
-    // Fetch booking history based on the user's email
     fetch(`http://localhost:8080/api/bookings/history?email=${email}`)
       .then((response) => response.json())
       .then((data) => {
@@ -21,18 +19,24 @@ const BookingHistoryPage = () => {
   };
 
   return (
-    <div>
+    <div className="booking-history-page">
       {/* Navbar */}
       <div className="navbar">
-        <button className="nav-button">Bus List</button>
-        <button className="nav-button">Logout</button>
+        <div className="nav-left">
+          <span className="brand-name">TRIP TREK</span>
+        </div>
+        <div className="nav-right">
+          <button className="nav-button" onClick={() => window.location.href = '/BusList'}>
+            Bus List
+          </button>
+        </div>
       </div>
 
-      {/* Body content */}
-      <div className="booking-history-container">
+      {/* Main Content */}
+      <div className="content">
         {!isEmailSubmitted ? (
-          <div className="email-input">
-            <h2>Enter your email to view booking history</h2>
+          <div className="email-section">
+            <h2>Enter Your Email</h2>
             <form onSubmit={handleEmailSubmit}>
               <input
                 type="email"
@@ -41,120 +45,170 @@ const BookingHistoryPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <button type="submit">Submit</button>
+              <button type="submit">View History</button>
             </form>
           </div>
         ) : (
-          <div className="booking-history-table">
+          <div className="history-section">
             <h2>Your Booking History</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Bus Name</th>
-                  <th>Source</th>
-                  <th>Destination</th>
-                  <th>Cost</th>
-                  <th>Travel Date</th>
-                  <th>Seats</th>
-                  <th>Passengers</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bookingHistory.map((booking) => (
-                  <tr key={booking.bookingId}>
-                    <td>{booking.busName}</td>
-                    <td>{booking.source}</td>
-                    <td>{booking.destination}</td>
-                    <td>{booking.cost}</td>
-                    <td>{booking.travelDate}</td>
-                    <td>{booking.numberOfSeats}</td>
-                    <td>
-                      {booking.passengers.map((passenger, index) => (
-                        <div key={index}>{passenger.name} ({passenger.gender})</div>
-                      ))}
-                    </td>
+            {bookingHistory.length > 0 ? (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Bus Name</th>
+                    <th>Source</th>
+                    <th>Destination</th>
+                    <th>Cost</th>
+                    <th>Travel Date</th>
+                    <th>Seats</th>
+                    <th>Passengers</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {bookingHistory.map((booking) => (
+                    <tr key={booking.bookingId}>
+                      <td>{booking.busName}</td>
+                      <td>{booking.source}</td>
+                      <td>{booking.destination}</td>
+                      <td>{booking.cost}</td>
+                      <td>{booking.travelDate}</td>
+                      <td>{booking.numberOfSeats}</td>
+                      <td>
+                        {booking.passengers.map((passenger, index) => (
+                          <div key={index}>
+                            {passenger.name} ({passenger.gender})
+                          </div>
+                        ))}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>No bookings found for this email.</p>
+            )}
           </div>
         )}
       </div>
 
       {/* Styles */}
       <style jsx>{`
-        body {
+        .booking-history-page {
+          min-height: 100vh;
+          width: 100%;
+          background-color: black;
+          color: white;
+          display: flex;
+          flex-direction: column;
           font-family: Arial, sans-serif;
         }
 
         .navbar {
           background-color: black;
-          color: white;
-          padding: 10px 20px;
+          padding: 15px 30px;
           display: flex;
-          justify-content: flex-end;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid #333;
+        }
+
+        .nav-left .brand-name {
+          font-size: 24px;
+          font-weight: bold;
+          color: white;
+        }
+
+        .nav-right {
+          display: flex;
+          align-items: center;
         }
 
         .nav-button {
-          margin-left: 20px;
-          padding: 10px;
-          background-color: #333;
+          padding: 10px 20px;
+          background-color: transparent;
           color: white;
-          border: none;
-          border-radius: 5px;
+          border: 2px solid white;
+          border-radius: 8px;
           cursor: pointer;
+          font-size: 16px;
+          transition: background-color 0.3s, color 0.3s;
         }
 
         .nav-button:hover {
-          background-color: #555;
+          background-color: white;
+          color: black;
         }
 
-        .booking-history-container {
-          margin-top: 80px;
-          padding: 20px;
-          max-width: 800px;
-          margin: 50px auto;
+        .content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 40px 20px;
         }
 
-        .email-input {
+        .email-section, .history-section {
+          width: 100%;
+          max-width: 1000px;
           text-align: center;
         }
 
-        .email-input input {
-          padding: 10px;
-          font-size: 16px;
-          margin-right: 10px;
-          border-radius: 5px;
-          border: 1px solid #ccc;
+        .email-section h2, .history-section h2 {
+          margin-bottom: 20px;
+          font-size: 28px;
         }
 
-        .email-input button {
-          padding: 10px 20px;
-          background-color: #28a745;
-          color: white;
+        form {
+          margin-top: 20px;
+        }
+
+        input[type="email"] {
+          padding: 12px;
+          width: 300px;
+          border-radius: 8px;
           border: none;
-          border-radius: 5px;
+          margin-right: 10px;
+          font-size: 16px;
+        }
+
+        button[type="submit"] {
+          padding: 12px 24px;
+          background-color: #00b894;
+          border: none;
+          border-radius: 8px;
+          color: white;
+          font-size: 16px;
           cursor: pointer;
+          transition: background-color 0.3s;
         }
 
-        .email-input button:hover {
-          background-color: #218838;
+        button[type="submit"]:hover {
+          background-color: #019875;
         }
 
-        .booking-history-table table {
+        table {
           width: 100%;
           border-collapse: collapse;
+          margin-top: 30px;
         }
 
-        .booking-history-table table th,
-        .booking-history-table table td {
-          padding: 12px;
-          text-align: left;
-          border: 1px solid #ddd;
+        th, td {
+          border: 1px solid #444;
+          padding: 12px 15px;
+          text-align: center;
         }
 
-        .booking-history-table table th {
-          background-color: #f4f4f4;
+        th {
+          background-color: #222;
+        }
+
+        td {
+          background-color: #111;
+        }
+
+        p {
+          margin-top: 20px;
+          font-size: 18px;
         }
       `}</style>
     </div>

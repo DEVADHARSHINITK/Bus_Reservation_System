@@ -12,6 +12,7 @@ public class BookingResponseDTO {
     private int numberOfSeats;
     private List<PassengerDTO> passengers;
     private String userEmail;
+	private Long busId;
 	public Long getBookingId() {
 		return bookingId;
 	}
@@ -65,6 +66,15 @@ public class BookingResponseDTO {
 	}
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
+	}
+	public void setBusId(Long busId) {
+		this.busId=busId;
+		
+	}
+	
+	public Long getBusId()
+	{
+		return busId;
 	}
     
 

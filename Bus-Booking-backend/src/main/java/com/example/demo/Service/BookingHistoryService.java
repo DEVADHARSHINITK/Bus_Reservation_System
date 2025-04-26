@@ -31,6 +31,10 @@ public class BookingHistoryService {
 	    public BookingResponseDTO bookBus(BookingRequestDTO request) {
 	        Bus bus = busRepository.findById(request.getBusId())
 	                .orElseThrow(() -> new RuntimeException("Bus not found"));
+	        
+	     // Calculate total cost = seats × costPerSeat
+	        double totalCost = request.getNumberOfSeats() * bus.getCost();
+
 
 	        BookingHistory booking = new BookingHistory();
 	        booking.setBusId(bus.getId());
@@ -40,6 +44,7 @@ public class BookingHistoryService {
 	        booking.setCost(bus.getCost());
 	        booking.setTravelDate(request.getTravelDate());
 	        booking.setNumberOfSeats(request.getNumberOfSeats());
+	        booking.setCost(totalCost);  
 	        booking.setUserEmail(request.getUserEmail());
 
 	        List<Passenger> passengerList = new ArrayList<>();
@@ -56,6 +61,7 @@ public class BookingHistoryService {
 
 	        BookingResponseDTO response = new BookingResponseDTO();
 	        response.setBookingId(saved.getId());
+	        response.setBusId(saved.getBusId());
 	        response.setBusName(saved.getBusName());
 	        response.setSource(saved.getSource());
 	        response.setDestination(saved.getDestination());

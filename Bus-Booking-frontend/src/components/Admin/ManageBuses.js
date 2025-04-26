@@ -106,15 +106,17 @@ const ManageBuses = () => {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: '#000', color: '#fff', minHeight: '100vh' }}>
       <style>{`
         .admin-navbar {
-          background-color: #343a40;
-          padding: 10px 20px;
+          background-color: #212121;
+          padding: 20px 30px;
           color: white;
           display: flex;
           justify-content: space-between;
           align-items: center;
+          font-size: 18px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         }
 
         .admin-navbar h2 {
@@ -122,13 +124,18 @@ const ManageBuses = () => {
         }
 
         .admin-links button {
-          background-color: white;
-          color: #343a40;
-          border: none;
-          margin-left: 10px;
-          padding: 6px 12px;
+          background-color: transparent;
+          color: white;
+          border: 1px solid #fff;
+          margin-left: 15px;
+          padding: 10px 18px;
           border-radius: 5px;
           cursor: pointer;
+          font-size: 16px;
+        }
+
+        .admin-links button:hover {
+          background-color: #444;
         }
 
         .table-container {
@@ -178,6 +185,8 @@ const ManageBuses = () => {
           border: 1px solid #ccc;
           border-radius: 4px;
           width: 200px;
+          background-color: transparent;
+          color: white;
         }
 
         .form-container button {
@@ -188,15 +197,26 @@ const ManageBuses = () => {
           border-radius: 4px;
           cursor: pointer;
         }
+
+        /* Navbar height and style */
+        .admin-navbar {
+          min-height: 80px;
+        }
+
+        /* Add a small margin for the page content */
+        .table-container {
+          margin-top: 20px;
+        }
       `}</style>
 
       {/* Navbar */}
       <nav className="admin-navbar">
-        <h2>Manage Buses</h2>
+        <h2>Trip Trek</h2>
         <div className="admin-links">
           <button onClick={() => navigate("/Dashboard")}>Dashboard</button>
+          <button onClick={() => navigate("/UsersList")}>UsersList</button>
           <button onClick={() => navigate("/AllBookings")}>All Bookings</button>
-          <button onClick={() => navigate("/UsersList")}>Users List</button>
+          <button onClick={() => navigate("/")}>Logout</button>
         </div>
       </nav>
 

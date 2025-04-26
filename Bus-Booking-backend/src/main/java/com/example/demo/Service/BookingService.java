@@ -44,5 +44,23 @@ public class BookingService {
 
         return dto;
     }
+    
+    public List<BookingResponseDTO> getAllBookings() {
+        List<BookingHistory> all = bookingRepository.findAll();
 
+        return all.stream()
+                  .map(this::convertToDTO)
+                  .collect(Collectors.toList());
+    }
+    
+    public long CountBookings() {
+        return bookingRepository.count();
+    }
+
+    public double getTotalRevenue() {
+        List<BookingHistory> allBookings = bookingRepository.findAll();
+        return allBookings.stream()
+                .mapToDouble(booking -> booking.getCost()) // assuming `cost` already = numOfSeats × costPerSeat
+                .sum();
+    }
 }

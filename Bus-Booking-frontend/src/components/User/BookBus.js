@@ -10,13 +10,13 @@ class BusBookingForm extends Component {
       numberOfSeats: 1,
       userEmail: '',
       passengers: [{ name: '', gender: '' }],
-      redirectToConfirmation: false,
+      redirectTo: null,
       bookingDetails: null,
     };
   }
 
   handleSeatChange = (e) => {
-    const seats = e.target.value;
+    const seats = parseInt(e.target.value);
     this.setState({
       numberOfSeats: seats,
       passengers: Array.from({ length: seats }, () => ({ name: '', gender: '' })),
@@ -50,7 +50,7 @@ class BusBookingForm extends Component {
       .then((data) => {
         this.setState({
           bookingDetails: data,
-          redirectToConfirmation: true,
+          redirectTo: '/ConfirmationPage',
         });
       })
       .catch((error) => {
@@ -58,22 +58,22 @@ class BusBookingForm extends Component {
       });
   };
 
-  handleLogout = () => {
-    this.setState({ redirectToConfirmation: true });
+  navigateTo = (path) => {
+    this.setState({ redirectTo: path });
   };
 
   render() {
-    if (this.state.redirectToConfirmation) {
-      return <Navigate to="/ConfirmationPage" state={{ bookingDetails: this.state.bookingDetails }} />;
+    if (this.state.redirectTo) {
+      return <Navigate to={this.state.redirectTo} state={{ bookingDetails: this.state.bookingDetails }} />;
     }
 
     return (
-      <div>
-        {/* Navbar with black background and right-aligned items */}
+      <div className="container">
+        {/* Navbar */}
         <div className="navbar">
-          <button className="nav-button" onClick={() => this.props.history.push('/BusList')}>Bus List</button>
-          <button className="nav-button" onClick={() => this.props.history.push('/BookingHistory')}>Booking History</button>
-          <button className="nav-button" onClick={this.handleLogout}>Logout</button>
+          <button className="nav-button" onClick={() => this.navigateTo('/BusList')}>Bus List</button>
+          <button className="nav-button" onClick={() => this.navigateTo('/BookingHistory')}>Booking History</button>
+          <button className="nav-button" onClick={() => this.navigateTo('/')}>Logout</button>
         </div>
 
         {/* Main Booking Form */}
@@ -91,6 +91,7 @@ class BusBookingForm extends Component {
                 className="input-field"
               />
             </div>
+
             <div className="form-group">
               <label htmlFor="travelDate">Travel Date:</label>
               <input
@@ -102,6 +103,7 @@ class BusBookingForm extends Component {
                 className="input-field"
               />
             </div>
+
             <div className="form-group">
               <label htmlFor="numberOfSeats">Number of Seats:</label>
               <input
@@ -114,6 +116,7 @@ class BusBookingForm extends Component {
                 className="input-field"
               />
             </div>
+
             <div className="form-group">
               <label htmlFor="userEmail">Your Email:</label>
               <input
@@ -126,7 +129,7 @@ class BusBookingForm extends Component {
               />
             </div>
 
-            {/* Dynamically display passenger fields */}
+            {/* Passenger Details */}
             {this.state.passengers.map((passenger, index) => (
               <div key={index} className="passenger-group">
                 <h3>Passenger {index + 1}</h3>
@@ -141,6 +144,7 @@ class BusBookingForm extends Component {
                     className="input-field"
                   />
                 </div>
+
                 <div className="form-group">
                   <label htmlFor={`passengerGender-${index}`}>Gender:</label>
                   <select
@@ -158,16 +162,29 @@ class BusBookingForm extends Component {
                 </div>
               </div>
             ))}
+
             <button type="submit" className="submit-btn">Book Now</button>
           </form>
         </div>
 
-        <style jsx>{`
+        {/* Styles */}
+        <style jsx="true">{`
           body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #222;
+            color: white;
+          }
+
+          .container {
+            min-height: 100vh;
+            background-color: #222;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 70px; /* for navbar space */
           }
 
           .navbar {
@@ -176,42 +193,41 @@ class BusBookingForm extends Component {
             width: 100%;
             background-color: black;
             padding: 10px 20px;
-            z-index: 1000;
             display: flex;
-            justify-content: flex-end; /* Align items to the right */
+            justify-content: flex-end;
+            z-index: 1000;
           }
 
-          .navbar button {
+          .nav-button {
             padding: 10px 20px;
             background-color: #333;
             color: white;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
             font-size: 16px;
-            margin-left: 10px; /* Add spacing between buttons */
+            margin-left: 10px;
+            cursor: pointer;
           }
 
-          .navbar button:hover {
+          .nav-button:hover {
             background-color: #555;
           }
 
           .booking-form-container {
-            margin-top: 80px; /* To avoid overlap with navbar */
-            max-width: 600px;
-            margin: 50px auto;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 30px;
             padding: 20px;
-            background-color: white;
+            background-color: transparent;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
           }
 
           h2 {
             text-align: center;
-            color: #333;
+            margin-bottom: 20px;
           }
 
-          form {
+          .booking-form {
             display: flex;
             flex-direction: column;
           }
@@ -220,43 +236,49 @@ class BusBookingForm extends Component {
             margin-bottom: 15px;
           }
 
-          .label {
-            font-weight: bold;
-          }
-
           .input-field {
+            width: 100%;
             padding: 10px;
             font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 100%;
-            box-sizing: border-box;
-          }
-
-          input[type="number"], input[type="email"], input[type="date"], select {
-            font-size: 16px;
-          }
-
-          button.submit-btn {
-            padding: 12px;
-            background-color: #28a745;
+            background-color: transparent;
             color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+          }
+
+           select.input-field {
+    background-color: transparent;
+    color: white;
+    appearance: none; /* optional: remove default browser style */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  option {
+    background-color: #333;
+    color: white;
+  }
+
+          .submit-btn {
+            margin-top: 20px;
+            padding: 12px;
+            font-size: 18px;
+            background-color: #28a745;
             border: none;
             border-radius: 5px;
-            font-size: 18px;
+            color: white;
             cursor: pointer;
-            margin-top: 20px;
           }
 
-          button.submit-btn:hover {
+          .submit-btn:hover {
             background-color: #218838;
           }
 
           .passenger-group {
             margin-bottom: 20px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
+            padding: 15px;
+            background-color: #444;
+            border-radius: 8px;
           }
         `}</style>
       </div>

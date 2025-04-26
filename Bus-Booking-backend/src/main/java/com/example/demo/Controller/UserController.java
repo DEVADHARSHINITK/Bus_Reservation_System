@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.LoginRequest;
 import com.example.demo.Model.User;
+import com.example.demo.Repository.UserRepository;
 import com.example.demo.Service.UserService;
 
 @RestController
@@ -22,6 +23,9 @@ import com.example.demo.Service.UserService;
 public class UserController {
 	@Autowired
     private UserService userService;
+	
+	@Autowired
+	private UserRepository userRepository;
 
     @PostMapping("/register")
     public User register(@RequestBody User user) {
@@ -45,4 +49,8 @@ public class UserController {
         return "User deleted successfully with ID: " + id;
     }
 
+    @GetMapping("/count")
+    public long countUsers() {
+        return userRepository.count();
+    }
 }

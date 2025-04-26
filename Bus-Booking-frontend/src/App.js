@@ -9,6 +9,7 @@ import BookingHistory from "./components/User/BookingHistory";
 import Dashboard from "./components/Admin/Dashboard";
 import ManageBuses from "./components/Admin/ManageBuses";
 import UsersList from "./components/Admin/UsersList";
+import AllBookings from "./components/Admin/AllBookings";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/UsersList" element={<UsersList />} />
         <Route path="/ManageBuses" element={<ManageBuses />} />
+        <Route path="/AllBookings" element={<AllBookings />} />
       </Routes>
     </Router>
   );

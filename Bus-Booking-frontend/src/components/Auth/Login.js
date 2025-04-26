@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import API from "../../api/api";
 import { useNavigate, Link } from "react-router-dom";
+import { FaUserPlus, FaHome } from "react-icons/fa";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -16,13 +17,11 @@ const Login = () => {
       const res = await API.post("/users/login", form);
       const user = res.data;
   
-      // Store user info in localStorage
-      localStorage.setItem("userEmail", user.email); // Save only the email here
-      localStorage.setItem("user", JSON.stringify(user)); // You can also save the entire user object if needed
+      localStorage.setItem("userEmail", user.email);
+      localStorage.setItem("user", JSON.stringify(user));
   
-      console.log(user);  // Check if user data is correct
+      console.log(user);
   
-      // ✅ Redirect based on role
       if (user.role === "ADMIN") {
         navigate("/Dashboard");
       } else if (user.role === "USER") {
@@ -36,30 +35,69 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div
+      style={{
+        fontFamily: "'Poppins', sans-serif",
+        backgroundColor: "#111",
+        color: "#fff",
+        minHeight: "100vh",
+        overflowY: "auto",
+        padding: "0 20px",
+      }}
+    >
       {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-        <span className="navbar-brand">Bus Booking</span>
-        <div className="ms-auto">
-          <Link className="btn btn-outline-light me-2" to="/">Home</Link>
-          <Link className="btn btn-outline-light" to="/SignUp">Sign Up</Link>
+      <nav
+        className="navbar navbar-expand-lg navbar-dark fixed-top"
+        style={{
+          backgroundColor: "#000",
+          padding: "20px 0",
+          zIndex: "9999",
+        }}
+      >
+        <div className="container d-flex justify-content-between align-items-center">
+          <Link to="/" className="navbar-brand fs-3" style={{ color: "#fff" }}>
+          🚌 TRIP TREK
+          </Link>
+
+          <div className="d-flex align-items-center gap-4">
+            <Link to="/SignUp" className="nav-link text-white fs-4" title="Signup">
+              <FaUserPlus />
+            </Link>
+            <Link to="/" className="nav-link text-white fs-4" title="Home">
+              <FaHome />
+            </Link>
+          </div>
         </div>
       </nav>
 
       {/* Login Form Container */}
-      <div className="container d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
-        <div className="card shadow p-4" style={{ maxWidth: "700px", width: "100%" }}>
-          <h2 className="text-center mb-4">Login</h2>
+      <div
+        className="container d-flex align-items-center justify-content-center"
+        style={{
+          minHeight: "100vh",
+          paddingTop: "100px",
+          paddingBottom: "50px",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "600px", // 🛠 Form made bigger
+            width: "100%",
+            backgroundColor: "transparent",
+            borderRadius: "10px",
+            padding: "40px", // 🛠 More padding
+            color: "#fff",
+          }}
+        >
+          <h2 className="text-center mb-4" style={{ color: "#fff", fontSize: "2.5rem" }}>
+            Login
+          </h2>
 
-          {error && (
-            <div className="alert alert-danger py-2 text-center">
-              {error}
-            </div>
-          )}
+          {error && <div className="alert alert-danger py-2 text-center">{error}</div>}
 
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label>Email</label>
+            <div className="mb-4">
+              <label style={{ color: "#fff", marginBottom: "10px", display: "block" }}>Email</label>
               <input
                 name="email"
                 type="email"
@@ -67,12 +105,19 @@ const Login = () => {
                 value={form.email}
                 onChange={handleChange}
                 required
-                placeholder="Enter your email"
+                placeholder="" // 🛠 Removed placeholder
+                style={{
+                  backgroundColor: "transparent", // 🛠 Transparent input
+                  color: "#fff",
+                  border: "1px solid #ccc", // 🛠 Only outline
+                  borderRadius: "5px",
+                  padding: "12px",
+                }}
               />
             </div>
 
-            <div className="mb-3">
-              <label>Password</label>
+            <div className="mb-4">
+              <label style={{ color: "#fff", marginBottom: "10px", display: "block" }}>Password</label>
               <input
                 name="password"
                 type="password"
@@ -80,21 +125,28 @@ const Login = () => {
                 value={form.password}
                 onChange={handleChange}
                 required
-                placeholder="Enter your password"
+                placeholder="" // 🛠 Removed placeholder
+                style={{
+                  backgroundColor: "transparent", // 🛠 Transparent input
+                  color: "#fff",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                  padding: "12px",
+                }}
               />
             </div>
 
-            <button type="submit" className="btn btn-primary w-100">
+            <button type="submit" className="btn btn-success w-100 mt-4" style={{ padding: "12px", fontSize: "1.2rem" }}>
               Login
             </button>
           </form>
 
-          <p className="text-center mt-3">
-            Don’t have an account? <Link to="/SignUp">Register</Link>
+          <p className="text-center mt-4" style={{ color: "#fff", fontSize: "1rem" }}>
+            Don’t have an account? <Link to="/signup" style={{ color: "#f45d48" }}>Register</Link>
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

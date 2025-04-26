@@ -57,4 +57,9 @@ public class BusController {
         return busRepository.findById(busId)
                 .orElseThrow(() -> new RuntimeException("Bus not found with id: " + busId));
     }
+    
+    @GetMapping("/count")
+    public long countBuses() {
+        return busRepository.count();
+    }
 }

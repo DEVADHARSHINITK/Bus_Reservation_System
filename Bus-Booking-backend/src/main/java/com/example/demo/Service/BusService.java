@@ -75,5 +75,9 @@ public class BusService {
             throw new RuntimeException("Bus not found with id: " + busId);
         }
     }
+    
+    public long CountBuses() {
+        return busRepository.count();
+    }
 
 }
